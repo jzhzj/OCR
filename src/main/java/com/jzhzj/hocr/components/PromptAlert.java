@@ -68,6 +68,14 @@ class PromptAlert {
         alert.showAndWait();
     }
 
+    static void promptWrongFileFormatError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Wrong Format");
+        alert.setHeaderText(null);
+        alert.setContentText("Please load image file.");
+        alert.showAndWait();
+    }
+
     static void promptFileExceedsLimitationWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Image too large");

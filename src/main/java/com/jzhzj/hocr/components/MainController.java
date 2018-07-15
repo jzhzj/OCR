@@ -97,6 +97,12 @@ public class MainController extends BorderPane implements Initializable {
             promptDropMoreThanOneFileWarning();
         }
         picFile = files.get(0);
+        String fileName = picFile.getName().toLowerCase();
+        if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png") || fileName.endsWith(".bmp"))) {
+            promptWrongFileFormatError();
+            picFile = null;
+            return;
+        }
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
             imageView.setEffect(new DropShadow());
