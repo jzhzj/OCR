@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -43,7 +44,7 @@ public class MainController extends BorderPane implements Initializable {
 //        String path = this.getClass().getResource("/dd.jpg").getPath();
         InputStream is = this.getClass().getResourceAsStream("/dd.jpg");
         imageView.setImage(new Image(new BufferedInputStream(is)));
-        imageView.setEffect(new DropShadow());
+        imageView.setEffect(new InnerShadow());
     }
 
     @FXML
@@ -98,6 +99,7 @@ public class MainController extends BorderPane implements Initializable {
         picFile = files.get(0);
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
+            imageView.setEffect(new DropShadow());
         } catch (IOException e) {
             promptSomethingWrongError();
         }
@@ -106,14 +108,25 @@ public class MainController extends BorderPane implements Initializable {
     @FXML
     void handleMouseEntered(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
-        DropShadow shadow = new DropShadow();
-        btn.setEffect(shadow);
+        btn.setEffect(new DropShadow());
     }
 
     @FXML
     void handleMouseExited(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
         btn.setEffect(null);
+    }
+
+    @FXML
+    void handleMousePressed(MouseEvent mouseEvent) {
+        Button btn = (Button) mouseEvent.getSource();
+        btn.setEffect(new InnerShadow());
+    }
+
+    @FXML
+    void handleMouseReleased(MouseEvent mouseEvent) {
+        Button btn = (Button) mouseEvent.getSource();
+        btn.setEffect(new DropShadow());
     }
 
     private void openFile() throws FileSizeExceedsLimitationException {
