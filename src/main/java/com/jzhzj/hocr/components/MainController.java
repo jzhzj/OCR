@@ -2,12 +2,16 @@ package com.jzhzj.hocr.components;
 
 import com.jzhzj.hocr.constant.MachineProps;
 import com.jzhzj.hocr.exception.*;
+import com.jzhzj.hocr.service.Keys;
 import com.jzhzj.hocr.service.Poster;
 import com.jzhzj.hocr.service.Receiver;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
@@ -17,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -38,10 +43,6 @@ public class MainController extends BorderPane implements Initializable {
     private ImageView imageView;
     @FXML
     private TextArea textArea;
-    @FXML
-    private MenuItem menuItemSave;
-    @FXML
-    private MenuItem menuItemConfigure;
 
 
     @Override
@@ -49,6 +50,21 @@ public class MainController extends BorderPane implements Initializable {
         InputStream is = this.getClass().getResourceAsStream("/dd.jpg");
         imageView.setImage(new Image(new BufferedInputStream(is)));
         imageView.setEffect(new InnerShadow());
+        try {
+            Keys.getInstance().initialize();
+        } catch (IOException e) {
+            promptConfigNotFoundError();
+            try {
+                autoGenerateConfig();
+                Keys.getInstance().initialize();
+            } catch (IOException ie) {
+                promptFailToGenerateConfigError();
+            } catch (NullKeysException ne) {
+                promptNoKeysInfo();
+            }
+        } catch (NullKeysException e) {
+            promptNoKeysInfo();
+        }
     }
 
     @FXML
@@ -63,7 +79,17 @@ public class MainController extends BorderPane implements Initializable {
                 }
                 break;
             case "menuItemConfigure":
-                setConfig();
+                try {
+                    openConfig();
+                } catch (IOException e) {
+                    promptConfigNotFoundError();
+                    try {
+                        autoGenerateConfig();
+                        openConfig();
+                    } catch (IOException ie) {
+                        promptFailToGenerateConfigError();
+                    }
+                }
                 break;
             default:
         }
@@ -123,6 +149,11 @@ public class MainController extends BorderPane implements Initializable {
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png") || fileName.endsWith(".bmp"))) {
             promptWrongFileFormatError();
             picFile = null;
+            return;
+        }
+        long picLen = picFile.length();
+        if (picLen > 5 * 1024 * 1024) {
+            promptFileExceedsLimitationWarning();
             return;
         }
         try {
@@ -224,8 +255,12 @@ public class MainController extends BorderPane implements Initializable {
         output(outPath);
     }
 
-    private void setConfig() {
+    private void openConfig() throws IOException {
         // TODO
+        File config = new File(MachineProps.CONFIG_PATH);
+        if (!config.exists())
+            throw new IOException();
+        Desktop.getDesktop().open(config);
     }
 
     private void promptFileAlreadyExistsWarning(String name) {
@@ -265,5 +300,38 @@ public class MainController extends BorderPane implements Initializable {
         } catch (IOException e) {
             promptFailToSaveTxtError();
         }
+    }
+
+    private void autoGenerateConfig() throws IOException {
+        File config = new File(MachineProps.CONFIG_PATH);
+        config.createNewFile();
+        StringBuilder sb = new StringBuilder();
+        sb.append("# 以#号开头的行将被视为注释，软件将不会读取该行。");
+        sb.append(System.lineSeparator());
+        sb.append("# 这个文件用于存放您腾讯云的 AppId, SecretId 以及 SecretKey。");
+        sb.append(System.lineSeparator());
+        sb.append("# 每月每个腾讯云账号，将免费拥有1000次手写识别调用量");
+        sb.append(System.lineSeparator());
+        sb.append("# 超出的用量将收费，具体收费规则请访问 https://cloud.tencent.com/document/product/866/17619");
+        sb.append(System.lineSeparator());
+        sb.append(System.lineSeparator());
+        sb.append(System.lineSeparator());
+        sb.append("# 请按如下方式填写腾讯云信息：");
+        sb.append(System.lineSeparator());
+        sb.append("# appid=1234567890");
+        sb.append(System.lineSeparator());
+        sb.append("# secretid=xxxxxxxxxxxxxxxx");
+        sb.append(System.lineSeparator());
+        sb.append("# secretkey=xxxxxxxxxxxxxxxx");
+        sb.append(System.lineSeparator());
+        sb.append("appid=");
+        sb.append(System.lineSeparator());
+        sb.append("secretid=");
+        sb.append(System.lineSeparator());
+        sb.append("secretkey=");
+        PrintWriter pw = new PrintWriter(config);
+        pw.print(sb.toString());
+        pw.flush();
+        pw.close();
     }
 }

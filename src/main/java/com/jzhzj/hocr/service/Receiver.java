@@ -13,7 +13,7 @@ public class Receiver {
             br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             json = br.readLine();
         } catch (IOException e) {
-            throw new FailToReceiveResultException("Failed to receive results from Tencent Cloud!");
+            throw new FailToReceiveResultException();
         }
         StringBuilder sb = new StringBuilder();
         int itemStringIndex = 0;
