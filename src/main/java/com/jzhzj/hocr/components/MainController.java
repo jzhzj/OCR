@@ -201,7 +201,7 @@ public class MainController extends BorderPane implements Initializable {
         // 判断图片大小是否超出限制
         long picLen = picFile.length();
         if (picLen > 5 * 1024 * 1024)
-            throw new FileSizeExceedsLimitationException("图片过大请压缩后再重新上传");
+            throw new FileSizeExceedsLimitationException();
 
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
@@ -256,7 +256,6 @@ public class MainController extends BorderPane implements Initializable {
     }
 
     private void openConfig() throws IOException {
-        // TODO
         File config = new File(MachineProps.CONFIG_PATH);
         if (!config.exists())
             throw new IOException();

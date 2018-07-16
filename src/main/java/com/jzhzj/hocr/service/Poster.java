@@ -75,7 +75,7 @@ public class Poster {
         if (picLen < 5 * 1024 * 1024)
             buffPic = new byte[(int) picLen];
         else
-            throw new FileSizeExceedsLimitationException("图片过大请压缩后再重新上传");
+            throw new FileSizeExceedsLimitationException();
         int len2 = buffPic.length;
 
         BufferedInputStream bis;
@@ -121,7 +121,7 @@ public class Poster {
             bos.flush();
             bos.close();
         } catch (IOException e) {
-            throw new FailToUploadPicException("上传失败");
+            throw new FailToUploadPicException();
         }
 
     }
