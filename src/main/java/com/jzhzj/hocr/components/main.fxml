@@ -17,11 +17,12 @@
       <Button fx:id="clearText" layoutX="545.0" layoutY="473.0" mnemonicParsing="false" onMouseClicked="#handleButtonClick" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" onMousePressed="#handleMousePressed" onMouseReleased="#handleMouseReleased" prefHeight="27.0" prefWidth="123.0" text="Clear text" />
       <ImageView fx:id="imageView" fitHeight="253.0" fitWidth="260.0" layoutX="78.0" layoutY="150.0" onDragDropped="#handleDrop" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
       <TextArea fx:id="textArea" layoutX="476.0" layoutY="100.0" prefHeight="352.0" prefWidth="260.0" />
-      <MenuBar layoutX="-8.0" prefHeight="29.0" prefWidth="824.0">
+      <MenuBar layoutX="-9.0" prefHeight="29.0" prefWidth="825.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem fx:id="menuItemSave" mnemonicParsing="false" onAction="#handleMenuItem" text="Save" />
+                  <MenuItem fx:id="menuItemConfigure" mnemonicParsing="false" onAction="#handleMenuItem" text="Configure" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">

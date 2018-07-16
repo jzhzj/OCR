@@ -1,10 +1,6 @@
 package com.jzhzj.hocr.service;
 
-import com.google.gson.Gson;
 import com.jzhzj.hocr.exception.FailToReceiveResultException;
-import com.jzhzj.hocr.service.resultDataStucture.Item;
-import com.jzhzj.hocr.service.resultDataStucture.Result;
-import com.jzhzj.hocr.service.resultDataStucture.Word;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -19,14 +15,16 @@ public class Receiver {
         } catch (IOException e) {
             throw new FailToReceiveResultException("Failed to receive results from Tencent Cloud!");
         }
-        Gson gson = new Gson();
-        Result res = gson.fromJson(json, Result.class);
-
         StringBuilder sb = new StringBuilder();
-        for (Item item : res.data.items) {
-            for (Word word : item.words) {
-                sb.append(word.character);
-            }
+        int itemStringIndex = 0;
+        while (itemStringIndex < json.length()) {
+            itemStringIndex = json.indexOf("itemstring", ++itemStringIndex);
+            if (itemStringIndex == -1)
+                break;
+            int resIndex = itemStringIndex + 13;
+            int endIndex = json.indexOf("\",", resIndex);
+            String itemString = json.substring(resIndex, endIndex);
+            sb.append(itemString);
             sb.append(System.lineSeparator());
         }
         sb.append(System.lineSeparator());

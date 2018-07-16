@@ -4,6 +4,7 @@ import com.jzhzj.hocr.constant.MachineProps;
 import com.jzhzj.hocr.exception.*;
 import com.jzhzj.hocr.service.Poster;
 import com.jzhzj.hocr.service.Receiver;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -37,14 +38,35 @@ public class MainController extends BorderPane implements Initializable {
     private ImageView imageView;
     @FXML
     private TextArea textArea;
+    @FXML
+    private MenuItem menuItemSave;
+    @FXML
+    private MenuItem menuItemConfigure;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-//        String path = this.getClass().getResource("/dd.jpg").getPath();
         InputStream is = this.getClass().getResourceAsStream("/dd.jpg");
         imageView.setImage(new Image(new BufferedInputStream(is)));
         imageView.setEffect(new InnerShadow());
+    }
+
+    @FXML
+    void handleMenuItem(ActionEvent actionEvent) {
+        MenuItem mi = (MenuItem) actionEvent.getSource();
+        switch (mi.getId()) {
+            case "menuItemSave":
+                try {
+                    saveTxt();
+                } catch (FileAlreadyExistsException e) {
+                    promptFileAlreadyExistsWarning(e.getMessage());
+                }
+                break;
+            case "menuItemConfigure":
+                setConfig();
+                break;
+            default:
+        }
     }
 
     @FXML
@@ -200,6 +222,10 @@ public class MainController extends BorderPane implements Initializable {
         if (outPath.exists())
             throw new FileAlreadyExistsException(outPath.getName());
         output(outPath);
+    }
+
+    private void setConfig() {
+        // TODO
     }
 
     private void promptFileAlreadyExistsWarning(String name) {
