@@ -1,6 +1,6 @@
 package com.jzhzj.hocr.service;
 
-import com.jzhzj.hocr.constant.MachineProps;
+import com.jzhzj.hocr.exception.FailToGenAppSignException;
 import com.jzhzj.hocr.exception.FailToUploadPicException;
 import com.jzhzj.hocr.exception.FileSizeExceedsLimitationException;
 
@@ -10,7 +10,7 @@ import java.net.ProtocolException;
 
 public class Poster {
     // TODO 加一个exception 未能生成appSign
-    public static void postRequest(HttpURLConnection con, File pic) throws FileNotFoundException, FileSizeExceedsLimitationException, FailToUploadPicException {
+    public static void postRequest(HttpURLConnection con, File pic) throws FileNotFoundException, FileSizeExceedsLimitationException, FailToUploadPicException, FailToGenAppSignException {
         final String newLine = "\r\n";
         final String boundaryPrefix = "--";
         String BOUNDARY = "========7d4a6d158c9";
@@ -23,7 +23,8 @@ public class Poster {
         try {
             appSign = Sign.appSign(appId, secretId, secretKey, "tencentyun", 3600 * 24 * 30);
         } catch (Exception e) {
-            throw new RuntimeException("未能生成appSign!");
+            // TODO
+            throw new FailToGenAppSignException();
         }
 
         // 设置http请求方式

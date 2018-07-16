@@ -115,4 +115,12 @@ public class PromptAlert {
         alert.setContentText("Please fill out the configuration file before using the App.");
         alert.showAndWait();
     }
+
+    public static void promptFailToGenAppSignError() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Fail to Generate AppSign");
+        alert.setHeaderText(null);
+        alert.setContentText("This error occurs, might because you didn't fill out the configuration file correctly.");
+        alert.showAndWait();
+    }
 }

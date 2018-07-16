@@ -232,6 +232,8 @@ public class MainController extends BorderPane implements Initializable {
             promptFailToUploadError();
         } catch (IOException e) {
             promptFailToConnectToServerError();
+        } catch (FailToGenAppSignException e) {
+            promptFailToGenAppSignError();
         }
     }
 
