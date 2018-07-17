@@ -3,7 +3,7 @@ package com.jzhzj.hocr.components;
 import javafx.scene.control.Alert;
 
 
-public class PromptAlert {
+class PromptAlert {
     static void promptCopySuccessfullyInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -12,7 +12,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptLoadFileFirstInfo() {
+    static void promptLoadFileFirstInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Please choose image");
         alert.setHeaderText(null);
@@ -20,7 +20,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptSomethingWrongError() {
+    static void promptSomethingWrongError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Something Wrong");
         alert.setHeaderText(null);
@@ -28,7 +28,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToConnectToServerError() {
+    static void promptFailToConnectToServerError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Failed to Connect to Server");
         alert.setHeaderText(null);
@@ -36,7 +36,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToUploadError() {
+    static void promptFailToUploadError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Failed to Upload image");
         alert.setHeaderText(null);
@@ -44,7 +44,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToReceiveError() {
+    static void promptFailToReceiveError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Failed to receive results");
         alert.setHeaderText(null);
@@ -52,7 +52,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToShowImageError() {
+    static void promptFailToShowImageError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Failed to show Image");
         alert.setHeaderText(null);
@@ -60,7 +60,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToSaveTxtError() {
+    static void promptFailToSaveTxtError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Failed to save txt");
         alert.setHeaderText(null);
@@ -68,7 +68,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptWrongFileFormatError() {
+    static void promptWrongFileFormatError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Wrong Format");
         alert.setHeaderText(null);
@@ -76,7 +76,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFileExceedsLimitationWarning() {
+    static void promptFileExceedsLimitationWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Image too large");
         alert.setHeaderText(null);
@@ -84,7 +84,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptDropMoreThanOneFileWarning() {
+    static void promptDropMoreThanOneFileWarning() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Drop more than one file");
         alert.setHeaderText(null);
@@ -92,7 +92,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptConfigNotFoundError() {
+    static void promptConfigNotFoundError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Config not found!");
         alert.setHeaderText(null);
@@ -100,7 +100,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToGenerateConfigError() {
+    static void promptFailToGenerateConfigError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Fail to Generate Config File");
         alert.setHeaderText(null);
@@ -108,7 +108,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptNoKeysInfo() {
+    static void promptNoKeysInfo() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Keys Not Found");
         alert.setHeaderText(null);
@@ -116,7 +116,7 @@ public class PromptAlert {
         alert.showAndWait();
     }
 
-    public static void promptFailToGenAppSignError() {
+    static void promptFailToGenAppSignError() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Fail to Generate AppSign");
         alert.setHeaderText(null);

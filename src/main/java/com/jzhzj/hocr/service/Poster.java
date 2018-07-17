@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 
 public class Poster {
-    // TODO 加一个exception 未能生成appSign
     public static void postRequest(HttpURLConnection con, File pic) throws FileNotFoundException, FileSizeExceedsLimitationException, FailToUploadPicException, FailToGenAppSignException {
         final String newLine = "\r\n";
         final String boundaryPrefix = "--";
@@ -23,7 +22,6 @@ public class Poster {
         try {
             appSign = Sign.appSign(appId, secretId, secretKey, "tencentyun", 3600 * 24 * 30);
         } catch (Exception e) {
-            // TODO
             throw new FailToGenAppSignException();
         }
 
