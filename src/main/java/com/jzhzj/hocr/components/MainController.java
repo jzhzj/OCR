@@ -325,6 +325,7 @@ public class MainController extends BorderPane implements Initializable {
         sb.append(System.lineSeparator());
         sb.append("# secretkey=xxxxxxxxxxxxxxxx");
         sb.append(System.lineSeparator());
+        sb.append(System.lineSeparator());
         sb.append("appid=");
         sb.append(System.lineSeparator());
         sb.append("secretid=");
