@@ -13,6 +13,14 @@ import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+/**
+ * 这个类是用来获取Authorization（鉴权签名）的。
+ * 这个类是直接从腾讯官方文档里复制过来的，不需要任何改动。
+ * 如果出问题了 需要从腾讯文档重新获得代码。
+ * <p>
+ * 这个类的作用是利用 secret key，secret id， app id 来生成 Authorization
+ * 其结果将在调用Tencent Cloud api时，用于身份鉴定
+ */
 public class Sign {
 
     /**

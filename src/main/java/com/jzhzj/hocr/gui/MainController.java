@@ -1,8 +1,8 @@
-package com.jzhzj.hocr.components;
+package com.jzhzj.hocr.gui;
 
 import com.jzhzj.hocr.constant.MachineProps;
 import com.jzhzj.hocr.exception.*;
-import com.jzhzj.hocr.service.Keys;
+import com.jzhzj.hocr.util.Keys;
 import com.jzhzj.hocr.service.Poster;
 import com.jzhzj.hocr.service.Receiver;
 import javafx.event.ActionEvent;
@@ -17,7 +17,6 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -31,9 +30,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static com.jzhzj.hocr.components.PromptAlert.*;
+import static com.jzhzj.hocr.gui.PromptAlert.*;
+import static com.jzhzj.hocr.util.ConfigGenerator.*;
 
-public class MainController extends BorderPane implements Initializable {
+public class MainController implements Initializable {
     private File picFile;
     private File outPath;
     private String result;
@@ -53,17 +53,24 @@ public class MainController extends BorderPane implements Initializable {
         try {
             Keys.getInstance().initialize();
         } catch (IOException e) {
-            promptConfigNotFoundError();
+            promptError("Config not found!", null,
+                    "Could not found the configuration. " +
+                            "We'll automatically generate one for ya. " +
+                            "Please complete the configuration before using the APP.");
             try {
-                autoGenerateConfig();
+                genConfig();
                 Keys.getInstance().initialize();
             } catch (IOException ie) {
-                promptFailToGenerateConfigError();
+                promptError("Fail to Generate Config File", null,
+                        "Oops! Something goes wrong! " +
+                                "Failed to generate config file automatically. Please build one manually.");
             } catch (NullKeysException ne) {
-                promptNoKeysInfo();
+                promptInfo("Keys Not Found", null,
+                        "Please fill out the configuration file before using the App.");
             }
         } catch (NullKeysException e) {
-            promptNoKeysInfo();
+            promptInfo("Keys Not Found", null,
+                    "Please fill out the configuration file before using the App.");
         }
     }
 
@@ -82,12 +89,17 @@ public class MainController extends BorderPane implements Initializable {
                 try {
                     openConfig();
                 } catch (IOException e) {
-                    promptConfigNotFoundError();
+                    promptError("Config not found!", null,
+                            "Could not found the configuration. " +
+                                    "We'll automatically generate one for ya. " +
+                                    "Please complete the configuration before using the APP.");
                     try {
-                        autoGenerateConfig();
+                        genConfig();
                         openConfig();
                     } catch (IOException ie) {
-                        promptFailToGenerateConfigError();
+                        promptError("Fail to Generate Config File", null,
+                                "Oops! Something goes wrong! " +
+                                        "Failed to generate config file automatically. Please build one manually.");
                     }
                 }
                 break;
@@ -103,12 +115,15 @@ public class MainController extends BorderPane implements Initializable {
                 try {
                     openFile();
                 } catch (FileSizeExceedsLimitationException e) {
-                    promptFileExceedsLimitationWarning();
+                    promptWarning("Image too large", null,
+                            "The image you choose exceeds the size limitation, which is 5 MB! " +
+                                    "Please choose another image or compress the image before reload it again.");
                 }
                 break;
             case "recognize":
                 if (picFile == null) {
-                    promptLoadFileFirstInfo();
+                    promptInfo("Please choose image", null,
+                            "Please choose image before recognition");
                     return;
                 }
                 post_receive();
@@ -142,25 +157,29 @@ public class MainController extends BorderPane implements Initializable {
             if (files.size() > 1)
                 throw new DropMoreThanOneFileException();
         } catch (DropMoreThanOneFileException e) {
-            promptDropMoreThanOneFileWarning();
+            promptWarning("Drop more than one file", null,
+                    "Please drop one file each time.");
         }
         picFile = files.get(0);
         String fileName = picFile.getName().toLowerCase();
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png") || fileName.endsWith(".bmp"))) {
-            promptWrongFileFormatError();
+            promptError("Wrong Format", null,
+                    "Please load image file.");
             picFile = null;
             return;
         }
         long picLen = picFile.length();
         if (picLen > 5 * 1024 * 1024) {
-            promptFileExceedsLimitationWarning();
+            promptWarning("Image too large", null,
+                    "The image you choose exceeds the size limitation, which is 5 MB! " +
+                            "Please choose another image or compress the image before reload it again.");
             return;
         }
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
             imageView.setEffect(new DropShadow());
         } catch (IOException e) {
-            promptSomethingWrongError();
+            promptInfo("Something Wrong", null, "Oops. Something goes wrong :-(");
         }
     }
 
@@ -206,7 +225,8 @@ public class MainController extends BorderPane implements Initializable {
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
         } catch (IOException e) {
-            promptFailToShowImageError();
+            promptError("Failed to show Image", null,
+                    "Oops. Failed to show the image you chose :-(. If shows, ignore this :-).");
         }
     }
 
@@ -222,18 +242,27 @@ public class MainController extends BorderPane implements Initializable {
                 textArea.appendText(result);
                 picFile = null;
             } catch (FailToReceiveResultException e) {
-                promptFailToReceiveError();
+                promptError("Failed to receive results", null,
+                        "Oops. Failed to receive results from the cloud :-(. " +
+                                "Might be something wrong with the cloud.");
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (FileSizeExceedsLimitationException e) {
-            promptFileExceedsLimitationWarning();
+            promptWarning("Image too large", null,
+                    "The image you choose exceeds the size limitation, which is 5 MB! " +
+                            "Please choose another image or compress the image before reload it again.");
         } catch (FailToUploadPicException e) {
-            promptFailToUploadError();
+            promptError("Failed to Upload image", null,
+                    "Oops. Failed to upload the image you chose :-(. " +
+                            "Might be something wrong with the network.");
         } catch (IOException e) {
-            promptFailToConnectToServerError();
+            promptError("Failed to Connect to Server", null,
+                    "Oops. Failed to connect to server :-(. " +
+                            "Please check the network.");
         } catch (FailToGenAppSignException e) {
-            promptFailToGenAppSignError();
+            promptError("Fail to Generate AppSign", null,
+                    "This error occurs, might because you didn't fill out the configuration file correctly.");
         }
     }
 
@@ -242,7 +271,7 @@ public class MainController extends BorderPane implements Initializable {
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putString(result);
         clipboard.setContent(clipboardContent);
-        promptCopySuccessfullyInfo();
+        promptInfo("Success", null, "Text has already copied to clipboard!");
     }
 
     private void saveTxt() throws FileAlreadyExistsException {
@@ -299,41 +328,7 @@ public class MainController extends BorderPane implements Initializable {
             pw.flush();
             pw.close();
         } catch (IOException e) {
-            promptFailToSaveTxtError();
+            promptError("Failed to save txt", null, "Oops. Failed to save the txt :-(.");
         }
-    }
-
-    private void autoGenerateConfig() throws IOException {
-        File config = new File(MachineProps.CONFIG_PATH);
-        config.createNewFile();
-        StringBuilder sb = new StringBuilder();
-        sb.append("# 以#号开头的行将被视为注释，软件将不会读取该行。");
-        sb.append(System.lineSeparator());
-        sb.append("# 这个文件用于存放您腾讯云的 AppId, SecretId 以及 SecretKey。");
-        sb.append(System.lineSeparator());
-        sb.append("# 每月每个腾讯云账号，将免费拥有1000次手写识别调用量");
-        sb.append(System.lineSeparator());
-        sb.append("# 超出的用量将收费，具体收费规则请访问 https://cloud.tencent.com/document/product/866/17619");
-        sb.append(System.lineSeparator());
-        sb.append(System.lineSeparator());
-        sb.append(System.lineSeparator());
-        sb.append("# 请按如下方式填写腾讯云信息：");
-        sb.append(System.lineSeparator());
-        sb.append("# appid=1234567890");
-        sb.append(System.lineSeparator());
-        sb.append("# secretid=xxxxxxxxxxxxxxxx");
-        sb.append(System.lineSeparator());
-        sb.append("# secretkey=xxxxxxxxxxxxxxxx");
-        sb.append(System.lineSeparator());
-        sb.append(System.lineSeparator());
-        sb.append("appid=");
-        sb.append(System.lineSeparator());
-        sb.append("secretid=");
-        sb.append(System.lineSeparator());
-        sb.append("secretkey=");
-        PrintWriter pw = new PrintWriter(config);
-        pw.print(sb.toString());
-        pw.flush();
-        pw.close();
     }
 }

@@ -3,12 +3,28 @@ package com.jzhzj.hocr.service;
 import com.jzhzj.hocr.exception.FailToGenAppSignException;
 import com.jzhzj.hocr.exception.FailToUploadPicException;
 import com.jzhzj.hocr.exception.FileSizeExceedsLimitationException;
+import com.jzhzj.hocr.util.Keys;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 
+/**
+ * 本类将用于向Tencent Cloud发送Post Request。
+ *
+ * @author jzhzj
+ */
 public class Poster {
+    /**
+     * 接收一个HTTP连接和一个图片文件，将向目的服务器发起Post请求。
+     *
+     * @param con 与Tencent Cloud的HTTP连接
+     * @param pic 将被上传的图片文件
+     * @throws FileNotFoundException              当未找到图片文件时
+     * @throws FileSizeExceedsLimitationException 当文件大小超过腾讯限制时
+     * @throws FailToUploadPicException           当上传失败时
+     * @throws FailToGenAppSignException          当获取Authorization（鉴权签名）时
+     */
     public static void postRequest(HttpURLConnection con, File pic) throws FileNotFoundException, FileSizeExceedsLimitationException, FailToUploadPicException, FailToGenAppSignException {
         final String newLine = "\r\n";
         final String boundaryPrefix = "--";
@@ -31,6 +47,7 @@ public class Poster {
         } catch (ProtocolException e) {
             throw new RuntimeException("设置http请求有误！");
         }
+        // 设置http请求头属性
         con.setRequestProperty("Authorization", appSign);
         con.setRequestProperty("Host", "recognition.image.myqcloud.com");
 
@@ -83,6 +100,7 @@ public class Poster {
         } catch (FileNotFoundException e) {
             throw e;
         }
+        // 将图片的二进制文件读取到byte[]数组中
         try {
             bis.read(buffPic);
         } catch (IOException e) {
@@ -104,6 +122,9 @@ public class Poster {
         int len3 = buffCon2.length;
 
 
+        // 将需要上传的图片读取到byte[]中后
+        // 再设置请求头的Content-Length属性
+        // 因为没读出图片之前，无法获悉http请求报文的长度
         con.setRequestProperty("Content-Length", (len1 + len2 + len3) + "");
         con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + BOUNDARY);
 

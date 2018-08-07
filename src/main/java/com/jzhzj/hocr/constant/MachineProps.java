@@ -2,6 +2,12 @@ package com.jzhzj.hocr.constant;
 
 import java.util.ResourceBundle;
 
+/**
+ * 这个类用来从properties中读取软件的属性。
+ * 读取到的值将以常量的形式，提供给其他需要这些属性的类。
+ *
+ * @author jzhzj
+ */
 public class MachineProps {
     static {
         ResourceBundle rb = ResourceBundle.getBundle("prop");

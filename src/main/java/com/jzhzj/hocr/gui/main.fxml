@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="pane" prefHeight="601.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/8.0.141"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzhzj.hocr.components.MainController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jzhzj.hocr.gui.MainController">
     <children>
         <Button fx:id="chooseFile" layoutX="72.0" layoutY="524.0" mnemonicParsing="false"
                 onMouseClicked="#handleButtonClick" onMouseEntered="#handleMouseEntered"
