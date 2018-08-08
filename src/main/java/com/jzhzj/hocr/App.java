@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 /**
  * 这个类是程序入口。
- *
+ * 基本是套路代码，不需要改动。
  * @author jzhzj
  */
 public class App extends Application {

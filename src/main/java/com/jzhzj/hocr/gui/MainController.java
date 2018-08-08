@@ -53,9 +53,10 @@ public class MainController implements Initializable {
 
     /**
      * 由于本类实现了Initializable接口，所以在加载本类的时候，JVM将自动调用initialize()方法。
+     *
      * @param location
      * @param resources
-     * */
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         InputStream is = this.getClass().getResourceAsStream("/dd.jpg");
@@ -87,8 +88,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标对menu的点击事件。
+     *
      * @param actionEvent
-     * */
+     */
     @FXML
     void handleMenuItem(ActionEvent actionEvent) {
         MenuItem mi = (MenuItem) actionEvent.getSource();
@@ -124,8 +126,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标对按钮的点击事件。
+     *
      * @param mouseEvent
-     * */
+     */
     @FXML
     void handleButtonClick(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
@@ -166,8 +169,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理拖拽文件事件。
+     *
      * @param event
-     * */
+     */
     @FXML
     void handleDragOver(DragEvent event) {
         event.acceptTransferModes(TransferMode.ANY);
@@ -175,8 +179,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理拖拽后释放文件的事件。
+     *
      * @param event
-     * */
+     */
     @FXML
     void handleDrop(DragEvent event) {
         List<File> files = event.getDragboard().getFiles();
@@ -212,8 +217,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标进入按钮上方时按钮的效果。
+     *
      * @param mouseEvent
-     * */
+     */
     @FXML
     void handleMouseEntered(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
@@ -222,8 +228,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标离开按钮时的效果。
+     *
      * @param mouseEvent
-     * */
+     */
     @FXML
     void handleMouseExited(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
@@ -232,8 +239,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标点击按钮时按钮的效果。
+     *
      * @param mouseEvent
-     * */
+     */
     @FXML
     void handleMousePressed(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
@@ -242,8 +250,9 @@ public class MainController implements Initializable {
 
     /**
      * 处理鼠标点击按钮并释放后按钮的效果。
+     *
      * @param mouseEvent
-     * */
+     */
     @FXML
     void handleMouseReleased(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
@@ -252,7 +261,7 @@ public class MainController implements Initializable {
 
     /**
      * 打开被选中文件。
-     * */
+     */
     private void openFile() throws FileSizeExceedsLimitationException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Picture");
@@ -278,7 +287,7 @@ public class MainController implements Initializable {
 
     /**
      * 处理发送和接收。
-     * */
+     */
     private void post_receive() {
         URL url;
         try {
@@ -317,7 +326,7 @@ public class MainController implements Initializable {
 
     /**
      * 复制TextField中的文本到系统剪贴板。
-     * */
+     */
     private void copyToClipBoard() {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent clipboardContent = new ClipboardContent();
@@ -328,7 +337,7 @@ public class MainController implements Initializable {
 
     /**
      * 将TextField中的文本生成.txt文件。
-     * */
+     */
     private void saveTxt() throws FileAlreadyExistsException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save");
@@ -343,7 +352,7 @@ public class MainController implements Initializable {
 
     /**
      * 打开config文件
-     * */
+     */
     private void openConfig() throws IOException {
         File config = new File(MachineProps.CONFIG_PATH);
         if (!config.exists())
@@ -353,7 +362,7 @@ public class MainController implements Initializable {
 
     /**
      * 弹出"文件已存在"提醒
-     * */
+     */
     private void promptFileAlreadyExistsWarning(String name) {
         String contentText = "An item named \"" + name + "\" already exists in this location. Do you want to replace it with the one you are saving?";
         ButtonType[] buttonTypes = new ButtonType[2];
@@ -380,7 +389,7 @@ public class MainController implements Initializable {
 
     /**
      * 停止复制
-     * */
+     */
     private void stopCopy() {
         outPath = null;
     }
@@ -389,7 +398,7 @@ public class MainController implements Initializable {
      * 输出.txt文件。
      *
      * @param outPath 输出路径
-     * */
+     */
     private void output(File outPath) {
         try {
             PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(outPath)));
