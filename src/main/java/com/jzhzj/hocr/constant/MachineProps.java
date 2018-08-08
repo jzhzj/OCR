@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
  */
 public class MachineProps {
     static {
+        // 读取com.jzhzj.hocr.resources.prop.properties文件
         ResourceBundle rb = ResourceBundle.getBundle("prop");
         APP_NAME = rb.getString("APP_NAME");
         OCR_URL = rb.getString("OCR_URL");

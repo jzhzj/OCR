@@ -59,18 +59,27 @@ public class MainController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // 获取drag and drop引导图图片的输入流
         InputStream is = this.getClass().getResourceAsStream("/dd.jpg");
+        // 在gui上显示图片
         imageView.setImage(new Image(new BufferedInputStream(is)));
+        // 设置该图片的阴影效果
         imageView.setEffect(new InnerShadow());
+        // 将TextArea设置为不可编辑
+        textArea.setEditable(false);
         try {
+            // 初始化Keys类
             Keys.getInstance().initialize();
         } catch (IOException e) {
+            // 如果在当前目录中未能找到config文件的话，弹出Error
             promptError("Config not found!", null,
                     "Could not found the configuration. " +
                             "We'll automatically generate one for ya. " +
                             "Please complete the configuration before using the APP.");
             try {
+                // 自动生成config文件模板
                 genConfig();
+                // 初始化Keys类
                 Keys.getInstance().initialize();
             } catch (IOException ie) {
                 promptError("Fail to Generate Config File", null,
@@ -95,6 +104,7 @@ public class MainController implements Initializable {
     void handleMenuItem(ActionEvent actionEvent) {
         MenuItem mi = (MenuItem) actionEvent.getSource();
         switch (mi.getId()) {
+            // 如果鼠标点击的是"save"
             case "menuItemSave":
                 try {
                     saveTxt();
@@ -102,16 +112,21 @@ public class MainController implements Initializable {
                     promptFileAlreadyExistsWarning(e.getMessage());
                 }
                 break;
+            // 如果点击的是"Configure"
             case "menuItemConfigure":
                 try {
+                    // 打开config文件
                     openConfig();
                 } catch (IOException e) {
+                    // 如果config文件不存在，染出Error
                     promptError("Config not found!", null,
                             "Could not found the configuration. " +
                                     "We'll automatically generate one for ya. " +
                                     "Please complete the configuration before using the APP.");
                     try {
+                        // 自动生成配置文件
                         genConfig();
+                        // 打开配置文件
                         openConfig();
                     } catch (IOException ie) {
                         promptError("Fail to Generate Config File", null,
@@ -133,6 +148,7 @@ public class MainController implements Initializable {
     void handleButtonClick(MouseEvent mouseEvent) {
         Button btn = (Button) mouseEvent.getSource();
         switch (btn.getId()) {
+            // 如果鼠标点击的是"choose File"
             case "chooseFile":
                 try {
                     openFile();
@@ -142,25 +158,34 @@ public class MainController implements Initializable {
                                     "Please choose another image or compress the image before reload it again.");
                 }
                 break;
+            // 如果鼠标点击的是"recognize"
             case "recognize":
+                // 如果用户并未选择文件，弹出提醒
                 if (picFile == null) {
                     promptInfo("Please choose image", null,
                             "Please choose image before recognition");
                     return;
                 }
+                // 向Tencent Cloud发送请求并接收结果
                 post_receive();
                 break;
+            // 如果用户点击的是"copy text"
             case "copyText":
+                // 将TextField中的字符串复制到系统剪贴板
                 copyToClipBoard();
                 break;
+            // 如果用户点击的是"generate text file"
             case "generateTxtFile":
                 try {
+                    // 将TextField中的字符串以.txt文件保存
                     saveTxt();
                 } catch (FileAlreadyExistsException e) {
                     promptFileAlreadyExistsWarning(e.getMessage());
                 }
                 break;
+            // 如果用户点击的是"clear"
             case "clearText":
+                // 将TextField中的字符串清空
                 textArea.clear();
                 break;
             default:
@@ -186,28 +211,36 @@ public class MainController implements Initializable {
     void handleDrop(DragEvent event) {
         List<File> files = event.getDragboard().getFiles();
         try {
+            // 每次只能拖入1个图片文件，如果文件数量大于1，将抛出Warning
             if (files.size() > 1)
                 throw new DropMoreThanOneFileException();
         } catch (DropMoreThanOneFileException e) {
             promptWarning("Drop more than one file", null,
                     "Please drop one file each time.");
         }
-        picFile = files.get(0);
-        String fileName = picFile.getName().toLowerCase();
+        File inputFile = files.get(0);
+        // 获取文件名
+        String fileName = inputFile.getName().toLowerCase();
+        // 判断文件是否是图片文件。判断方式是查看文件后缀名
         if (!(fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png") || fileName.endsWith(".bmp"))) {
             promptError("Wrong Format", null,
                     "Please load image file.");
-            picFile = null;
             return;
         }
-        long picLen = picFile.length();
+        // 获取文件大小
+        long picLen = inputFile.length();
+        // 如果文件超过5MB，将抛出提醒。
+        // （腾讯云规定每次请求的报文不能超过6MB，包括请求头、请求体、图片二进制文件，这里为了方便，规定图片不能超过5MB）
         if (picLen > 5 * 1024 * 1024) {
             promptWarning("Image too large", null,
                     "The image you choose exceeds the size limitation, which is 5 MB! " +
                             "Please choose another image or compress the image before reload it again.");
             return;
         }
+        // 将picFile指向新输入的图片
+        picFile = inputFile;
         try {
+            // 在UI上显示新的图片
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
             imageView.setEffect(new DropShadow());
         } catch (IOException e) {
@@ -267,16 +300,16 @@ public class MainController implements Initializable {
         fileChooser.setTitle("Choose Picture");
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("image files", "*.jpg", "*.jpeg", "*.png", "*.bmp"));
-        picFile = null;
-        picFile = fileChooser.showOpenDialog(new Stage());
-        if (picFile == null)
+        File inputFile = fileChooser.showOpenDialog(new Stage());
+        if (inputFile == null)
             return;
 
-        // 判断图片大小是否超出限制
-        long picLen = picFile.length();
+        // 如果文件超过5MB，将抛出提醒。
+        // （腾讯云规定每次请求的报文不能超过6MB，包括请求头、请求体、图片二进制文件，这里为了方便，规定图片不能超过5MB）
+        long picLen = inputFile.length();
         if (picLen > 5 * 1024 * 1024)
             throw new FileSizeExceedsLimitationException();
-
+        picFile = inputFile;
         try {
             imageView.setImage(new Image(new BufferedInputStream(new FileInputStream(picFile))));
         } catch (IOException e) {
@@ -291,12 +324,16 @@ public class MainController implements Initializable {
     private void post_receive() {
         URL url;
         try {
+            // 从配置中获取Tencent Cloud的URL
             url = new URL(MachineProps.OCR_URL);
+            // 获取与该URL的HTTP连接
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            // 发送POST请求
             Poster.postRequest(con, picFile);
             try {
+                // 获取返回结果
                 result = Receiver.receive(con);
-                textArea.setEditable(false);
+                // 将获取的结果append到textArea中
                 textArea.appendText(result);
                 picFile = null;
             } catch (FailToReceiveResultException e) {
@@ -362,6 +399,8 @@ public class MainController implements Initializable {
 
     /**
      * 弹出"文件已存在"提醒
+     *
+     * @param name 已存在的文件名
      */
     private void promptFileAlreadyExistsWarning(String name) {
         String contentText = "An item named \"" + name + "\" already exists in this location. Do you want to replace it with the one you are saving?";
