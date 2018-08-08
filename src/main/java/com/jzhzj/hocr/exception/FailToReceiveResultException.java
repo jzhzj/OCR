@@ -1,5 +1,10 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that failed to receive results from the cloud.
+ *
+ * @author jzhzj
+ */
 public class FailToReceiveResultException extends Exception {
     /**
      * Constructs a <code>FailToReceiveResultException</code> with

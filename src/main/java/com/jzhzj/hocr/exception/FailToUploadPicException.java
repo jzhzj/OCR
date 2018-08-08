@@ -1,5 +1,11 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that failed to upload the file to the cloud.
+ * Either bad connection to the Internet or banned by firewalls.
+ *
+ * @author jzhzj
+ */
 public class FailToUploadPicException extends Exception {
     /**
      * Constructs a <code>FailToUploadPicException</code> with

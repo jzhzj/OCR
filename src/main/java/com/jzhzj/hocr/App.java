@@ -14,6 +14,12 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
+    /**
+     * 继承自Application接口。
+     * 主方法调用后，JVM将自动调用此方法。
+     * @param primaryStage
+     * @throws Exception
+     * */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/com/jzhzj/hocr/gui/main.fxml"));
@@ -22,6 +28,10 @@ public class App extends Application {
         primaryStage.show();
     }
 
+    /**
+     * 这是主函数。
+     * @param args 命令行接受的参数
+     * */
     public static void main(String[] args) {
         launch(args);
     }

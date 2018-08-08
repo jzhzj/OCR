@@ -1,5 +1,11 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that failed to generate the app sign.
+ * Either no keys could be found in the config file or keys were filled in incorrectly.
+ *
+ * @author jzhzj
+ */
 public class FailToGenAppSignException extends Exception {
     /**
      * Constructs a <code>FailToGenAppSignException</code> with

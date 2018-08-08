@@ -1,5 +1,10 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that the file chose by the user exceeds the size limitation.
+ *
+ * @author jzhzj
+ */
 public class FileSizeExceedsLimitationException extends Exception {
     /**
      * Constructs a <code>FileSizeExceedsLimitationException</code> with

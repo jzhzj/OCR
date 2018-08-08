@@ -1,5 +1,10 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that more than one file were dropped.
+ *
+ * @author jzhzj
+ */
 public class DropMoreThanOneFileException extends Exception {
     /**
      * Constructs a <code>DropMoreThanOneFileException</code> with

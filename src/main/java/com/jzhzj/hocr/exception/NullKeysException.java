@@ -1,5 +1,10 @@
 package com.jzhzj.hocr.exception;
 
+/**
+ * Thrown to indicate that no Keys found in the config file.
+ *
+ * @author jzhzj
+ */
 public class NullKeysException extends Exception {
     /**
      * Constructs a <code>NullKeysException</code> with
