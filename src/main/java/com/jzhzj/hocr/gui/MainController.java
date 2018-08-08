@@ -387,6 +387,8 @@ public class MainController implements Initializable {
 
     /**
      * 输出.txt文件。
+     *
+     * @param outPath 输出路径
      * */
     private void output(File outPath) {
         try {
