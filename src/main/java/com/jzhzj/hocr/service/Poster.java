@@ -5,6 +5,7 @@ import com.jzhzj.hocr.exception.FailToGenAppSignException;
 import com.jzhzj.hocr.exception.FailToUploadPicException;
 import com.jzhzj.hocr.exception.FileSizeExceedsLimitationException;
 import com.jzhzj.hocr.util.Keys;
+import com.jzhzj.hocr.util.Sign;
 
 import java.io.*;
 import java.net.HttpURLConnection;

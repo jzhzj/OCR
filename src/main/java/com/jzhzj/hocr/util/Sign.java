@@ -1,4 +1,4 @@
-package com.jzhzj.hocr.service;
+package com.jzhzj.hocr.util;
 
 /*
  * Copyright 2017, Tencent Inc
