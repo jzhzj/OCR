@@ -12,14 +12,19 @@ public class MachineProps {
     static {
         // 读取com.jzhzj.hocr.resources.prop.properties文件
         ResourceBundle rb = ResourceBundle.getBundle("prop");
+        // App properties
         APP_NAME = rb.getString("APP_NAME");
         OCR_URL = rb.getString("OCR_URL");
 
+        // Poster properties
         BOUNDARY_PREFIX = rb.getString("BOUNDARY_PREFIX");
         BOUNDARY = rb.getString("BOUNDARY");
 
+        // Receiver properties
         PARAGRAPH_SEPARATOR = rb.getString("PARAGRAPH_SEPARATOR");
         RESULT_ANCHOR = rb.getString("RESULT_ANCHOR");
+
+        // config path
         CONFIG_PATH = System.getProperty("user.dir") + "/config.config";
     }
 

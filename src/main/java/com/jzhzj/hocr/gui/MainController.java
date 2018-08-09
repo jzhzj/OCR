@@ -301,8 +301,10 @@ public class MainController implements Initializable {
     private void openFile() throws FileSizeExceedsLimitationException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose Picture");
+        // 添加文件选择器
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("image files", "*.jpg", "*.jpeg", "*.png", "*.bmp"));
+        // 打开文件选择器
         File inputFile = fileChooser.showOpenDialog(new Stage());
         if (inputFile == null)
             return;
