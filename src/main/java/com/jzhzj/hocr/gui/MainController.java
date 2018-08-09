@@ -53,6 +53,9 @@ public class MainController implements Initializable {
 
     /**
      * 由于本类实现了Initializable接口，所以在加载本类的时候，JVM将自动调用initialize()方法。
+     * 本方法在窗口一打开时便将Drag and Drop引导图加载在窗口里，并给该图片设置阴影。
+     * 本方法还初始化了Keys。如果初始化有误，将弹出提醒。
+     * 本方法将TextField设为不可编辑。
      *
      * @param location
      * @param resources

@@ -1,5 +1,6 @@
 package com.jzhzj.hocr.service;
 
+import com.jzhzj.hocr.constant.MachineProps;
 import com.jzhzj.hocr.exception.FailToGenAppSignException;
 import com.jzhzj.hocr.exception.FailToUploadPicException;
 import com.jzhzj.hocr.exception.FileSizeExceedsLimitationException;
@@ -27,8 +28,8 @@ public class Poster {
      */
     public static void postRequest(HttpURLConnection con, File pic) throws FileNotFoundException, FileSizeExceedsLimitationException, FailToUploadPicException, FailToGenAppSignException {
         final String newLine = "\r\n";
-        final String boundaryPrefix = "--";
-        String BOUNDARY = "========7d4a6d158c9";
+        final String boundaryPrefix = MachineProps.BOUNDARY_PREFIX;
+        final String BOUNDARY = MachineProps.BOUNDARY;
 
         // 获取appSign
         String appSign;
@@ -42,14 +43,12 @@ public class Poster {
         }
 
         // 设置http请求方式
+        // 相关api文档，请登录Tencent Cloud查找
         try {
             con.setRequestMethod("POST");
         } catch (ProtocolException e) {
             throw new RuntimeException("设置http请求有误！");
         }
-        // 设置http请求头属性
-        con.setRequestProperty("Authorization", appSign);
-        con.setRequestProperty("Host", "recognition.image.myqcloud.com");
 
         // 编辑content
         StringBuilder sb = new StringBuilder();
@@ -80,11 +79,14 @@ public class Poster {
         sb.append(newLine);
         sb.append(newLine);
 
+        // 将StringBuilder中的字符串取出
         String content1 = sb.toString();
+        // 将content1写入byte[]数组
         byte[] buffCon1 = content1.getBytes();
         int len1 = buffCon1.length;
 
 
+        // 获取图片的大小
         long picLen = pic.length();
         byte[] buffPic;
         // 判断图片大小是否超出限制
@@ -96,12 +98,13 @@ public class Poster {
 
         BufferedInputStream bis;
         try {
+            // 建立与目标图片关联的输入流
             bis = new BufferedInputStream(new FileInputStream(pic));
         } catch (FileNotFoundException e) {
             throw e;
         }
-        // 将图片的二进制文件读取到byte[]数组中
         try {
+            // 将图片的二进制文件读取到byte[]数组中
             bis.read(buffPic);
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +116,8 @@ public class Poster {
             }
         }
 
-        sb = new StringBuilder();
+        // 将StringBuilder清空
+        sb.setLength(0);
         sb.append(newLine);
         sb.append(boundaryPrefix);
         sb.append(BOUNDARY);
@@ -125,6 +129,9 @@ public class Poster {
         // 将需要上传的图片读取到byte[]中后
         // 再设置请求头的Content-Length属性
         // 因为没读出图片之前，无法获悉http请求报文的长度
+        // 设置http请求头属性
+        con.setRequestProperty("Authorization", appSign);
+        con.setRequestProperty("Host", "recognition.image.myqcloud.com");
         con.setRequestProperty("Content-Length", (len1 + len2 + len3) + "");
         con.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + BOUNDARY);
 

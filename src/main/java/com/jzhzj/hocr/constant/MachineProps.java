@@ -14,10 +14,20 @@ public class MachineProps {
         ResourceBundle rb = ResourceBundle.getBundle("prop");
         APP_NAME = rb.getString("APP_NAME");
         OCR_URL = rb.getString("OCR_URL");
+
+        BOUNDARY_PREFIX = rb.getString("BOUNDARY_PREFIX");
+        BOUNDARY = rb.getString("BOUNDARY");
+
+        PARAGRAPH_SEPARATOR = rb.getString("PARAGRAPH_SEPARATOR");
+        RESULT_ANCHOR = rb.getString("RESULT_ANCHOR");
         CONFIG_PATH = System.getProperty("user.dir") + "/config.config";
     }
 
     public static final String APP_NAME;
     public static final String OCR_URL;
     public static final String CONFIG_PATH;
+    public static final String BOUNDARY_PREFIX;
+    public static final String BOUNDARY;
+    public static final String PARAGRAPH_SEPARATOR;
+    public static final String RESULT_ANCHOR;
 }

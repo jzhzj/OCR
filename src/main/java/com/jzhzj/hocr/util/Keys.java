@@ -20,13 +20,6 @@ public class Keys {
      *
      * @return 本类对象
      */
-    /*
-     * 本想将各种keys设为常量，一旦赋值将不可更改。
-     * 但由于一点小问题，没想好怎么实现。
-     * 感觉没必要浪费时间在这种事情上，所以用了单例模式，并且不提供setter。
-     * 尽量保证程序的严谨性。
-     * 以后如果有功夫的话，可以将appId，secretId以及secretKey设为final。
-     * */
     public static Keys getInstance() {
         return ourInstance;
     }
